@@ -34,10 +34,18 @@
 <body>
     <div class="container">
 
-        <div class="jumbotron text-center p-3 mt-3">
-            <h1><span class="text-danger">Rock</span> beats <span class="text-warning">Scissors</span></h1>
-            <h1><span class="text-warning">Scissors</span> beats <span class="text-success">Paper</span></h1>
-            <h1><span class="text-success">Paper</span> beats <span class="text-danger">Rock</span></h1>
+        <div class="jumbotron py-2 mt-3">
+            <div class="row text-center">
+                <div class="col-sm-6 py-2">
+                    <h1><span class="text-danger">Rock</span> beats <span class="text-warning">Scissors</span></h1>
+                </div>
+                <div class="col-sm-6 py-2">
+                    <h1><span class="text-warning">Scissors</span> beats <span class="text-success">Paper</span></h1>
+                </div>
+                <div class="col-sm-12 py-2">
+                    <h1><span class="text-success">Paper</span> beats <span class="text-danger">Rock</span></h1>
+                </div>
+            </div>
         </div>
 
         <div class="card mb-3">
@@ -54,17 +62,17 @@
         </div>
 
         <div class="row text-center mb-3">
-            <div class="col-sm-4 mb-2 mb-sm-0">
+            <div class="col-6 col-sm-4 mb-2 mb-sm-0">
                 <button type="button" class="btn btn-outline-danger item" id="rock">
                     <i class="far fa-hand-rock fa-6x"></i>
                 </button>
             </div>
-            <div class="col-sm-4 mb-2 mb-sm-0">
+            <div class="col-6 col-sm-4 mb-2 mb-sm-0">
                 <button type="button" class="btn btn-outline-warning item" id="scissors">
                     <i class="far fa-hand-scissors fa-6x"></i>
                 </button>
             </div>
-            <div class="col-sm-4">
+            <div class="col-12 col-sm-4">
                 <button type="button" class="btn btn-outline-success item" id="paper">
                     <i class="far fa-hand-paper fa-6x"></i>
                 </button>
@@ -110,7 +118,6 @@
             </div>
             <div class="card-body" id="history-box"></div>
         </div>
-    </div>
 
     </div>
 
