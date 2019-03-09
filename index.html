@@ -34,7 +34,7 @@
 <body>
     <div class="container">
 
-        <div class="jumbotron text-center p-3">
+        <div class="jumbotron text-center p-3 mt-3">
             <h1><span class="text-danger">Rock</span> beats <span class="text-warning">Scissors</span></h1>
             <h1><span class="text-warning">Scissors</span> beats <span class="text-success">Paper</span></h1>
             <h1><span class="text-success">Paper</span> beats <span class="text-danger">Rock</span></h1>
@@ -42,27 +42,30 @@
 
         <div class="card mb-3">
             <div class="card-header text-center">
-                <h4>all players in the order of joining</h4>
+                <h4>here are all the players in the order of joining</h4>
+                <h4><small>the two first players are playing</small></h4>
             </div>
-            <div class="card-body" id="queue-box">Player-1 Player-2 Player-3</div>
-            <div class="card-footer text-center text-primary" id="info-box">
-                <h3>You (Player-3) are waiting in the queue.</h3>
+            <div class="card-body">
+                <p id="queue-box"></p>
+            </div>
+            <div class="card-footer text-center text-primary">
+                <h3 id="info-box"></h3>
             </div>
         </div>
 
         <div class="row text-center mb-3">
             <div class="col-sm-4 mb-2 mb-sm-0">
-                <button type="button" class="btn btn-outline-danger" id="rock">
+                <button type="button" class="btn btn-outline-danger item" id="rock">
                     <i class="far fa-hand-rock fa-6x"></i>
                 </button>
             </div>
             <div class="col-sm-4 mb-2 mb-sm-0">
-                <button type="button" class="btn btn-outline-warning" id="scissors">
+                <button type="button" class="btn btn-outline-warning item" id="scissors">
                     <i class="far fa-hand-scissors fa-6x"></i>
                 </button>
             </div>
             <div class="col-sm-4">
-                <button type="button" class="btn btn-outline-success" id="paper">
+                <button type="button" class="btn btn-outline-success item" id="paper">
                     <i class="far fa-hand-paper fa-6x"></i>
                 </button>
             </div>
@@ -74,7 +77,9 @@
                     <div class="card-header text-center">
                         <h4>your wins</h4>
                     </div>
-                    <div class="card-body" id="wins-box">10</div>
+                    <div class="card-body">
+                        <p id="wins-box"></p>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-4 mb-2 mb-sm-0">
@@ -82,7 +87,9 @@
                     <div class="card-header text-center">
                         <h4>your ties</h4>
                     </div>
-                    <div class="card-body" id="ties-box">8</div>
+                    <div class="card-body" id="ties-box">
+                        <p id="ties-box"></p>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -90,7 +97,9 @@
                     <div class="card-header text-center">
                         <h4>your losses</h4>
                     </div>
-                    <div class="card-body" id="losses-box">12</div>
+                    <div class="card-body">
+                        <p id="losses-box"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,28 +108,7 @@
             <div class="card-header text-center">
                 <h4>your history</h4>
             </div>
-            <div class="card-body" id="history-box">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed finibus sed massa id porttitor. Sed
-                    ultricies fringilla posuere. Donec mollis libero magna. Phasellus vel dictum sapien, eget sodales
-                    lacus. Proin scelerisque nisl vitae tempor dignissim. Sed ultrices rhoncus diam, egestas imperdiet
-                    turpis eleifend non. Suspendisse enim diam, dapibus quis pellentesque euismod, consectetur quis
-                    tellus. Aenean at ante accumsan, bibendum lacus ac, tempor urna. Aenean consequat dolor eget diam
-                    volutpat,
-                    id cursus ligula pretium. Phasellus ut varius urna. Sed condimentum lacus ut nisl vulputate, luctus
-                    eleifend arcu faucibus. Donec ac metus et augue venenatis dapibus vel in urna. Sed ullamcorper
-                    porttitor tellus ac fermentum. Maecenas ullamcorper interdum justo. Quisque nec tincidunt felis,
-                    sed ultrices nisl. Mauris id nisi eros. Etiam eu purus non purus vulputate eleifend non at dolor.
-                    Donec imperdiet vulputate ligula ullamcorper placerat. Fusce porttitor imperdiet mi, a commodo nisi
-                    facilisis nec. Nulla condimentum gravida enim, id dapibus eros dictum eget. Nulla eget elit
-                    aliquam, eleifend felis ornare, imperdiet purus. Etiam vehicula sodales elementum. Donec ut dolor
-                    semper, malesuada metus eu, pellentesque velit.
-                    Aliquam vel justo id massa ultricies pulvinar. Vestibulum at placerat turpis. Morbi laoreet eros id
-                    dolor scelerisque, vitae venenatis neque condimentum. Sed tempus vestibulum ex quis consectetur.
-                    Aenean ultrices rutrum enim, eget pellentesque nulla scelerisque sed. Vivamus aliquam eget nisi et
-                    suscipit. Proin non euismod ligula, quis elementum nibh. Suspendisse in nisi lectus.
-                </p>
-            </div>
+            <div class="card-body" id="history-box"></div>
         </div>
     </div>
 
