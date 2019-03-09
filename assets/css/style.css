@@ -1,0 +1,8 @@
+body {
+    font-family: 'Gochi Hand', cursive;
+}
+
+#history-box {
+    max-height: 200px;
+    overflow: auto
+}
