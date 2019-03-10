@@ -60,11 +60,29 @@ playersRef.orderByKey().on('value', function (snapshot) {
 
         console.log("all players:");
         console.log(allPlayers);
+
+        $("#queue-box").empty();
+        allPlayers.forEach(function (player) {
+            $("#queue-box").append(" <<< " + player.name);
+        });
     }
 });
 
 
+var otherPlayer = {
+    name: "",
+    pick: "", // r, p, s
+    key: ""
+}
+
 var playingPlayers = [];
+
+// Counters
+var thisResults = {
+    win: 0,
+    tie: 0,
+    loss: 0
+}
 
 playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
     if (snapshot.val()) {
@@ -86,10 +104,209 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
         console.log("playing players:");
         console.log(playingPlayers);
 
-        if (thisPlayer.key === playingPlayers[0].key || thisPlayer.key === playingPlayers[1].key) {
+        if (playingPlayers.length < 2) {
+            console.log("You are waiting for the opponent!");
+
+            $("#info-box").text(`you (${thisPlayer.name}) are waiting for the opponent`);
+
+            $("button.item").each(function () {
+                $(this).prop("disabled", true);
+            });
+
+        } else if (thisPlayer.key === playingPlayers[0].key || thisPlayer.key === playingPlayers[1].key) {
             console.log("You are playing!");
+
+            if (thisPlayer.key === playingPlayers[0].key) {
+                otherPlayer.name = playingPlayers[1].name;
+                otherPlayer.key = playingPlayers[1].key;
+
+
+                otherPlayer.pick = playingPlayers[1].pick;
+
+            } else {
+                otherPlayer.name = playingPlayers[0].name;
+                otherPlayer.key = playingPlayers[0].key;
+
+
+
+                otherPlayer.pick = playingPlayers[0].pick;
+            }
+
+            $("#info-box").text(`you (${thisPlayer.name}) are playing against ${otherPlayer.name}`);
+
+            $("button.item").each(function () {
+                $(this).prop("disabled", false);
+            });
+
+
+
+
+            if (thisPlayer.pick !== "" && otherPlayer.pick !== "") {
+                console.log("this player pick: " + thisPlayer.pick);
+                console.log("other player pick: " + otherPlayer.pick);
+
+                var result = runRPSGame(thisPlayer.pick, otherPlayer.pick);
+                thisResults[result] += 1;
+
+
+
+                console.log("this player results:");
+                console.log(thisResults);
+
+
+                $("#wins-box").text(thisResults.win);
+                $("#ties-box").text(thisResults.tie);
+                $("#losses-box").text(thisResults.loss);
+
+
+                if (result === "win") {
+                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] won against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+
+                } else if (result === "tie") {
+                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] tied with ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+
+                } else if (result === "loss") {
+                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] lost to ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+
+                }
+
+
+                thisPlayer.pick = "";
+                var updates = {};
+                updates[thisPlayer.key + "/pick"] = "";
+                updates[otherPlayer.key + "/pick"] = "";
+                playersRef.update(updates);
+
+
+                // $("button.item").each(function () {
+                //     $(this).prop("disabled", false);
+
+                // });
+
+
+            }
+
+
+
+
         } else {
-            console.log("You are waiting in the queue");
+            console.log("You are waiting in the queue.");
+
+            $("#info-box").text(`you (${thisPlayer.name}) are waiting in the queue`);
+
+            $("button.item").each(function () {
+                $(this).prop("disabled", true);
+            });
         }
     }
 });
+
+
+
+$("button.item").click(function () {
+    var item = $(this).attr("id");
+
+
+    thisPlayer.pick = item;
+
+    var update = {};
+    update[thisPlayer.key + "/pick"] = thisPlayer.pick;
+
+    playersRef.update(update);
+
+
+    // $("button.item").each(function () {
+    //     var item2 = $(this).attr("id");
+
+    //     if (item2 !== item) {
+    //         $(this).prop("disabled", true);
+
+    //     }
+
+    // });
+
+    $("button.item").each(function () {
+        $(this).prop("disabled", true);
+
+    });
+
+
+
+
+
+    if (thisPlayer.pick !== "" && otherPlayer.pick !== "") {
+        console.log("this player pick: " + thisPlayer.pick);
+        console.log("other player pick: " + otherPlayer.pick);
+
+        var result = runRPSGame(thisPlayer.pick, otherPlayer.pick);
+        thisResults[result] += 1;
+
+
+
+        console.log("this player results:");
+        console.log(thisResults);
+
+
+        $("#wins-box").text(thisResults.win);
+        $("#ties-box").text(thisResults.tie);
+        $("#losses-box").text(thisResults.loss);
+
+
+        if (result === "win") {
+            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] won against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+
+        } else if (result === "tie") {
+            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] tied with ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+
+        } else if (result === "loss") {
+            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] lost to ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+
+        }
+
+
+        thisPlayer.pick = "";
+        var updates = {};
+        updates[thisPlayer.key + "/pick"] = "";
+        updates[otherPlayer.key + "/pick"] = "";
+        playersRef.update(updates);
+
+
+        // $("button.item").each(function () {
+        //     $(this).prop("disabled", false);
+
+        // });
+
+    }
+
+});
+
+
+function runRPSGame(thisPick, otherPick) {
+    if (thisPick === otherPick) {
+        return "tie";
+    }
+
+    if (thisPick === 'rock' && otherPick === 'scissors') {
+        return "win";
+    }
+
+    if (thisPick === 'scissors' && otherPick === 'rock') {
+        return "loss";
+    }
+
+    if (thisPick === 'rock' && otherPick === 'paper') {
+        return "loss";
+    }
+
+    if (thisPick === 'paper' && otherPick === 'rock') {
+        return "win";
+    }
+
+    if (thisPick === 'paper' && otherPick === 'scissors') {
+        return "loss";
+    }
+
+    if (thisPick === 'scissors' && otherPick === 'paper') {
+        return "win";
+    }
+}
