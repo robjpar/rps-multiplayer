@@ -147,13 +147,13 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
                 $("#losses-box").text(thisResults.loss);
 
                 if (result === "win") {
-                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] won against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] WON against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
 
                 } else if (result === "tie") {
-                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] tied with ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] TIED with ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
 
                 } else if (result === "loss") {
-                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] lost to ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+                    $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] LOST to ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
 
                 }
 
@@ -212,13 +212,13 @@ $("button.item").click(function () {
         $("#losses-box").text(thisResults.loss);
 
         if (result === "win") {
-            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] won against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] WON against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
 
         } else if (result === "tie") {
-            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] tied with ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] TIED with ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
 
         } else if (result === "loss") {
-            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] lost to ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
+            $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] LOST to ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
 
         }
 
