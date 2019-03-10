@@ -105,7 +105,7 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
         if (playingPlayers.length < 2) {
             console.log("You are waiting for the opponent!");
 
-            $("#info-box").text(`you (${thisPlayer.name}) are waiting for the opponent`);
+            $("#info-box").text(`you (${thisPlayer.name}) are waiting for the second player to join`);
 
             $("button.item").each(function () {
                 $(this).prop("disabled", true);
