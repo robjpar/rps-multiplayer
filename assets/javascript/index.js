@@ -9,12 +9,11 @@ var config = {
 };
 firebase.initializeApp(config);
 
-// Create a variable to reference the database.
+// Create a reference the database.
 var database = firebase.database();
 
 var playersRef = database.ref("players");
 var connectedRef = database.ref(".info/connected");
-
 
 var thisPlayer = {
     name: "",
@@ -68,7 +67,6 @@ playersRef.orderByKey().on('value', function (snapshot) {
     }
 });
 
-
 var otherPlayer = {
     name: "",
     pick: "", // r, p, s
@@ -119,17 +117,13 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
             if (thisPlayer.key === playingPlayers[0].key) {
                 otherPlayer.name = playingPlayers[1].name;
                 otherPlayer.key = playingPlayers[1].key;
-
-
                 otherPlayer.pick = playingPlayers[1].pick;
 
             } else {
                 otherPlayer.name = playingPlayers[0].name;
                 otherPlayer.key = playingPlayers[0].key;
-
-
-
                 otherPlayer.pick = playingPlayers[0].pick;
+
             }
 
             $("#info-box").text(`you (${thisPlayer.name}) are playing against ${otherPlayer.name}`);
@@ -138,9 +132,6 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
                 $(this).prop("disabled", false);
             });
 
-
-
-
             if (thisPlayer.pick !== "" && otherPlayer.pick !== "") {
                 console.log("this player pick: " + thisPlayer.pick);
                 console.log("other player pick: " + otherPlayer.pick);
@@ -148,16 +139,12 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
                 var result = runRPSGame(thisPlayer.pick, otherPlayer.pick);
                 thisResults[result] += 1;
 
-
-
                 console.log("this player results:");
                 console.log(thisResults);
-
 
                 $("#wins-box").text(thisResults.win);
                 $("#ties-box").text(thisResults.tie);
                 $("#losses-box").text(thisResults.loss);
-
 
                 if (result === "win") {
                     $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] won against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
@@ -170,24 +157,14 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
 
                 }
 
-
                 thisPlayer.pick = "";
+                otherPlayer.pick = "";
                 var updates = {};
                 updates[thisPlayer.key + "/pick"] = "";
                 updates[otherPlayer.key + "/pick"] = "";
                 playersRef.update(updates);
 
-
-                // $("button.item").each(function () {
-                //     $(this).prop("disabled", false);
-
-                // });
-
-
             }
-
-
-
 
         } else {
             console.log("You are waiting in the queue.");
@@ -201,38 +178,24 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) {
     }
 });
 
-
-
 $("button.item").click(function () {
     var item = $(this).attr("id");
 
-
     thisPlayer.pick = item;
+
+    console.log("this player pick: " + thisPlayer.pick);
 
     var update = {};
     update[thisPlayer.key + "/pick"] = thisPlayer.pick;
 
     playersRef.update(update);
 
-
-    // $("button.item").each(function () {
-    //     var item2 = $(this).attr("id");
-
-    //     if (item2 !== item) {
-    //         $(this).prop("disabled", true);
-
-    //     }
-
-    // });
-
     $("button.item").each(function () {
         $(this).prop("disabled", true);
 
     });
 
-
-
-
+    $("#info-box").text(`you (${thisPlayer.name}) are WAITING for ${otherPlayer.name}'s pick`);
 
     if (thisPlayer.pick !== "" && otherPlayer.pick !== "") {
         console.log("this player pick: " + thisPlayer.pick);
@@ -241,16 +204,12 @@ $("button.item").click(function () {
         var result = runRPSGame(thisPlayer.pick, otherPlayer.pick);
         thisResults[result] += 1;
 
-
-
         console.log("this player results:");
         console.log(thisResults);
-
 
         $("#wins-box").text(thisResults.win);
         $("#ties-box").text(thisResults.tie);
         $("#losses-box").text(thisResults.loss);
-
 
         if (result === "win") {
             $("#history-box").prepend(`<p>you (${thisPlayer.name}) [${thisPlayer.pick}] won against ${otherPlayer.name} [${otherPlayer.pick}]</p>`);
@@ -263,23 +222,15 @@ $("button.item").click(function () {
 
         }
 
-
         thisPlayer.pick = "";
+        otherPlayer.pick = "";
         var updates = {};
         updates[thisPlayer.key + "/pick"] = "";
         updates[otherPlayer.key + "/pick"] = "";
         playersRef.update(updates);
 
-
-        // $("button.item").each(function () {
-        //     $(this).prop("disabled", false);
-
-        // });
-
     }
-
 });
-
 
 function runRPSGame(thisPick, otherPick) {
     if (thisPick === otherPick) {
