@@ -39,6 +39,11 @@ var thisResults = {
     loss: 0
 }
 
+// Timer
+var time = 0; // seconds
+var timerOn = false; // switch the timer on/off
+const TIME_OUT = 30; // seconds given before resetting this player if an item not picked
+
 // A round of the RPS game
 function runRPSGame(thisPick, otherPick) {
     if (thisPick === otherPick) {
@@ -153,6 +158,10 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) { // whe
 
         // If only one player in the queue
         if (playingPlayers.length < 2) {
+
+            // Switch the timer off
+            timerOn = false;
+
             // Debugging info
             console.log("You are waiting for the opponent!");
 
@@ -184,10 +193,30 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) { // whe
             // Print out the message of playing for this player
             $("#info-box").text(`you (${thisPlayer.name}) are playing against ${otherPlayer.name}`);
 
-            // Enable all buttons
-            $("button.item").each(function () {
-                $(this).prop("disabled", false);
-            });
+
+
+            // If this player's pick is not available
+            if (thisPlayer.pick === "") {
+
+                // Set the timer
+                time = TIME_OUT;
+                timerOn = true;
+
+                // Enable all buttons
+                $("button.item").each(function () {
+                    $(this).prop("disabled", false);
+                });
+
+                // If this player's pick is available (a button was clicked)
+            } else {
+                // Disable all buttons
+                $("button.item").each(function () {
+                    $(this).prop("disabled", true);
+                });
+
+                // Print out the message of waiting for the other player to pick an item
+                $("#info-box").text(`you (${thisPlayer.name}) are WAITING for ${otherPlayer.name}'s pick`);
+            }
 
             // If both this player's and other player's picks are available. (If not, the analogous
             // code will be executed below when this player's pick comes as a result of clicking
@@ -233,6 +262,9 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) { // whe
 
             // If this player is not one of the first two players in the queue
         } else {
+            // Turn the timer off
+            timerOn = false;
+
             // Debugging info
             console.log("You are waiting in the queue.");
 
@@ -248,7 +280,20 @@ playersRef.orderByKey().limitToFirst(2).on('value', function (snapshot) { // whe
 });
 
 // Functionality of the buttons for this player
-$("button.item").click(function () {
+$("button.item").click(function () { // when a button clicked
+
+    // Turn the timer off
+    timerOn = false;
+
+    // Disable all buttons
+    $("button.item").each(function () {
+        $(this).prop("disabled", true);
+    });
+
+    // Print out the message of waiting for the other player to pick an item
+    $("#info-box").text(`you (${thisPlayer.name}) are WAITING for ${otherPlayer.name}'s pick`);
+
+    // Get the item picked
     var item = $(this).attr("id"); // item === rock, paper, or scissors
 
     // Update the pick locally
@@ -261,14 +306,6 @@ $("button.item").click(function () {
     var update = {};
     update[thisPlayer.key + "/pick"] = thisPlayer.pick;
     playersRef.update(update);
-
-    // Disable all buttons
-    $("button.item").each(function () {
-        $(this).prop("disabled", true);
-    });
-
-    // Print out the message of waiting for this player
-    $("#info-box").text(`you (${thisPlayer.name}) are WAITING for ${otherPlayer.name}'s pick`);
 
     // If both this player's and other player's picks are available. (If not, the analogous code
     // will be executed above when the other player's pick comes from the Firebase)
@@ -311,3 +348,35 @@ $("button.item").click(function () {
         playersRef.update(updates);
     }
 });
+
+// Set a timer to reset this player if an item not picked. This is meant to avoid the situation when one player
+// is blocking accesses to the game by keeping the webpage open but not playing
+setInterval(function () {
+    time -= 1; // second
+
+    // If a time-out for this player
+    if (timerOn && time <= 0) {
+        timerOn = false;
+
+        // Print out the message
+        $("#timer-box").text("YOUR STATS ARE BEING RESET. MOVING TO THE END OF THE QUEUE AS A NEW PLAYER...");
+
+        // Set a delay before resetting this player so that the above message can be noted
+        setTimeout(function () {
+
+            // Reload the current page
+            location.reload();
+
+        }, 4000); // four seconds
+
+        // If timer is on
+    } else if (timerOn) {
+        $("#timer-box").text(`you have ${time} seconds remaining to pick an item`);
+
+        // If timer is off
+    } else {
+        $("#timer-box").empty();
+
+    }
+
+}, 1000); // one second
